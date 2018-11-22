@@ -6,6 +6,22 @@
 # Create At: 2018-11-22
 #
 from src import bp_model
+import numpy as np
+
 
 if __name__ == "__main__":
-    bp = bp_model.bpModel([1, 2])
+    datas = np.array([
+        [0, 0],
+        [0, 1],
+        [1, 0],
+        [1, 1]
+    ])
+    labels = np.array([
+        [1.0],
+        [0.0],
+        [0.0],
+        [1.0]
+    ])
+    bp = bp_model.bpModel([2, 4, 1], 300)
+    bp.train(datas, labels)
+    bp.predict([0, 1])
