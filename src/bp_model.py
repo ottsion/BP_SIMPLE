@@ -43,7 +43,6 @@ class bpModel():
                 self.backword()
 
     def forward(self):
-
         return _
 
     def backword(self):
