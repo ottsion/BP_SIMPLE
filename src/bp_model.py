@@ -28,10 +28,10 @@ class bpModel():
         self.hidden_size = layers_num[1]
         self.output_size = layers_num[2]
         # 初始化权值
-        self.X = np.zeros([1, self.input_size])
+        self.X = np.ones([1, self.input_size])
         self.W = np.random.random_sample(size=(self.input_size, self.hidden_size))
         self.V = np.random.random_sample(size=(self.hidden_size, self.output_size))
-        self.H = np.zeros(self.hidden_size)
+        self.H = np.ones(self.hidden_size)
         self.Y = np.zeros(self.output_size)
         self.alpha = np.random.random
         self.beta = np.random.random
@@ -46,18 +46,18 @@ class bpModel():
                 pred = self.forward()
                 self.backword()
                 for i in range(pred.shape[0]):
-                    error += (pred[i] - self.Y[i]) * (pred[i] - self.Y[i])
+                    error += (pred[i] - self.label[i]) * (pred[i] - self.label[i])
             if epoch % 20 == 0:
-                print("epoch... "+epoch+"   error: "+error)
+                print("epoch... "+str(epoch)+"   error: "+str(error))
 
     def forward(self):
         # 从输入层到隐藏层
         self.H = np.dot(self.X, self.W)
-        self.H = [self.sigmod(i) for i in self.H]
+        self.H = np.array([self.sigmod(i) for i in self.H])
 
         # 从隐藏层到输出层
         self.Y = np.dot(self.H, self.V)
-        self.Y = [self.sigmod(i) for i in self.Y]
+        self.Y = np.array([self.sigmod(i) for i in self.Y])
         return self.Y
 
     def backword(self):
@@ -66,18 +66,20 @@ class bpModel():
             # 计算每个y的误差值
             g_j = -(self.label[j] - self.Y[j]) * self.Y[j] * (1 - self.Y[j])
             for i in range(self.V.shape[0]):
-                self.V[i][j] = g_j * self.H[i]
+                self.V[i][j] = self.V[i][j] - g_j * self.H[i]
+
+
         # 隐藏层到输入层更新W
         for j in range(self.W.shape[1]):
             delta = 0
             for k in range(self.Y.shape[0]):
-                g_j = -(self.label[j] - self.Y[j]) * self.Y[j] * (1 - self.Y[j])
-                delta += g_j * self.V[j][k]
+                g_k = -(self.label[k] - self.Y[k]) * self.Y[k] * (1 - self.Y[k])
+                delta += g_k * self.V[j][k]
             for i in range(self.W.shape[0]):
-                self.W[i][j] = delta * self.X[i]
+                self.W[i][j] = self.W[i][j] - delta * self.X[i]
 
     def sigmod(self, x):
-        return 1.0 / (1.0 - np.exp(-x))
+        return 1.0 / (1.0 + np.exp(-x))
 
     def predict(self, data):
         self.X = data

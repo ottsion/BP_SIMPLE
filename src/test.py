@@ -22,6 +22,6 @@ if __name__ == "__main__":
         [0.0],
         [1.0]
     ])
-    bp = bp_model.bpModel([2, 4, 1], 300)
+    bp = bp_model.bpModel([2, 4, 1], 6000)
     bp.train(datas, labels)
-    bp.predict([0, 1])
+    print(bp.predict([3, 1]))
