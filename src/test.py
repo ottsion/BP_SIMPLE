@@ -24,4 +24,5 @@ if __name__ == "__main__":
     ])
     bp = bp_model.bpModel([2, 4, 1], 6000)
     bp.train(datas, labels)
-    print(bp.predict([3, 1]))
+    print(bp.predict([0, 1]))
+    print(bp.predict([1, 1]))

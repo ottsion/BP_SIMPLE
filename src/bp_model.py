@@ -75,6 +75,7 @@ class bpModel():
             for k in range(self.Y.shape[0]):
                 g_k = -(self.label[k] - self.Y[k]) * self.Y[k] * (1 - self.Y[k])
                 delta += g_k * self.V[j][k]
+            delta = self.H[j] * (1 - self.H[j]) * delta
             for i in range(self.W.shape[0]):
                 self.W[i][j] = self.W[i][j] - delta * self.X[i]
 
